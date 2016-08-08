@@ -17,6 +17,12 @@ type Cart2D interface {
     Y() float64
 }
 
+//Component vector
+func Component(m, d float64) (float64, float64) {
+	return m * math.Cos(d), m * math.Sin(d)
+}
+
+
 //Equals evaluates whether two points are the same
 func Equals(v, o Cart2D) bool {
     return FloatEqual(v.X(), o.X()) && FloatEqual(v.Y(), o.Y())
@@ -110,11 +116,11 @@ func IsZero(v Cart2D) bool {
 }
 
 
+
 //computes square of a number
 func sqr(x float64) float64 {
     return x * x
 }
-
 
 
 
