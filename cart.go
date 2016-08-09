@@ -15,11 +15,12 @@ const ε = 1e-12
 type Cart2D interface {
     X() float64
     Y() float64
+    IsNull() bool
 }
 
 //Component vector
 func Component(m, d float64) (float64, float64) {
-	return m * math.Cos(d), m * math.Sin(d)
+    return m * math.Cos(d), m * math.Sin(d)
 }
 
 
@@ -50,32 +51,49 @@ func Neg(v Cart2D) (float64, float64) {
 
 //Dot Product of two points as vectors
 func DotProduct(v, o Cart2D) float64 {
-    return (v.X() * o.X()) + (v.Y() * o.Y())
+    return DotProductXY(v.X(), v.Y(), o.X(), o.Y())
+}
+
+//Dot Product of two points as vectors
+func DotProductXY(vx, vy, ox, oy float64) float64 {
+    return (vx * ox) + (vy * oy)
 }
 
 
 //Unit vector of point
 func Unit(v Cart2D) (float64, float64) {
-    m := Magnitude(v)
+    return UnitXY(v.X(), v.Y())
+}
+
+//Unit vector of point
+func UnitXY(x, y float64) (float64, float64) {
+    m := MagnitudeXY(x, y)
     if FloatEqual(m, 0.0) {
         m = ε
     }
-    return v.X() / m, v.Y() / m
+    return x / m, y / m
 }
 
 
 //Projects  u on to v
 func Project(u, onv Cart2D) float64 {
     cx, cy := Unit(onv)
-    return DotProduct(u, NewCoord(cx, cy))
+    return DotProductXY(u.X(), u.Y(), cx, cy)
 }
 
-//2D cross product of OA and OB vectors,
+//2D cross product of AB and AC vectors given A, B, and C as points,
 //i.e. z-component of their 3D cross product.
-//Returns a positive value, if OAB makes a counter-clockwise turn,
+//Returns a positive value, if ABC makes a counter-clockwise turn,
 //negative for clockwise turn, and zero if the points are collinear.
-func CCW(o, a, b Cart2D) float64 {
-    return (b.X() - a.X()) * (o.Y() - a.Y()) - (b.Y() - a.Y()) * (o.X() - a.X())
+func CCW(a, b, c Cart2D) float64 {
+    return (b.X() - a.X()) * (c.Y() - a.Y()) - (b.Y() - a.Y()) * (c.X() - a.X())
+}
+//2D cross product of AB and AC vectors,
+//i.e. z-component of their 3D cross product.
+//Returns a positive value, if AB-->BC makes a counter-clockwise turn,
+//negative for clockwise turn, and zero if the points are collinear.
+func CCWVector(ab, ac Cart2D) float64 {
+    return (ab.X() * ac.Y()) - (ab.Y() * ac.X())
 }
 
 //Computes the square vector magnitude of pt as vector: x , y as components
@@ -91,19 +109,22 @@ func SquareMagnitude(v Cart2D, other ...Cart2D) float64 {
     return sqr(dx) + sqr(dy)
 }
 
-
 //Computes vector magnitude of pt as vector: x , y as components
 func Magnitude(v Cart2D, other ...Cart2D) float64 {
-    var m float64
+    var dx, dy float64
     if len(other) == 0 {
-        m = math.Hypot(v.X(), v.Y())
+        dx, dy = v.X(), v.Y()
     } else {
         o := other[0]
-        m = math.Hypot(o.X() - v.X(), o.Y() - v.Y())
+        dx, dy = o.X() - v.X(), o.Y() - v.Y()
     }
-    return m
+    return MagnitudeXY(dx, dy)
 }
 
+//Computes vector magnitude given x an dy component
+func MagnitudeXY(dx, dy float64) float64 {
+    return math.Hypot(dx, dy)
+}
 
 //Checks if catesian coordinate is null ( has NaN )
 func IsNull(v Cart2D) bool {
@@ -114,8 +135,6 @@ func IsNull(v Cart2D) bool {
 func IsZero(v Cart2D) bool {
     return FloatEqual(v.X(), 0.0) && FloatEqual(v.Y(), 0.0)
 }
-
-
 
 //computes square of a number
 func sqr(x float64) float64 {
