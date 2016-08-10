@@ -10,6 +10,7 @@ import (
 func TestCart(t *testing.T) {
     g := Goblin(t)
     p0 := NewCoord(0.0, 0.0)
+    pn := NewCoord(0.0, math.NaN())
     p1 := NewCoord(4, 5)
     p2 := NewCoord(4.0, 5.0)
     p3 := &Coord{4.0, math.NaN()}
@@ -17,11 +18,14 @@ func TestCart(t *testing.T) {
     g.Describe("geom.point", func() {
         g.It("x, y access & null", func() {
             g.Assert(IsZero(p0)).IsTrue()
+            g.Assert(IsNull(pn)).IsTrue()
+
             g.Assert(IsZero(p1)).IsFalse()
             g.Assert(Equals(p1, p2)).IsTrue()
 
             g.Assert(p1.X()).Equal(4.0)
             g.Assert(p1.Y()).Equal(5.0)
+            g.Assert(p0.IsNull()).IsFalse()
             g.Assert(IsNull(p3)).IsTrue()
         })
 
@@ -40,7 +44,12 @@ func TestCart(t *testing.T) {
         })
     })
 
-    g.Describe("Point operators", func() {
+    g.Describe("operators", func() {
+        g.It("component ", func() {
+            cx, cy := Component(5, Deg2rad(53.13010235415598))
+            g.Assert(FloatEqual(cx, 3.0)).IsTrue()
+            g.Assert(FloatEqual(cy, 4.0)).IsTrue()
+        })
         g.It("add ", func() {
             a, b := &Coord{3., 0.}, &Coord{0., 4.}
             cx, cy := Add(a, b)
@@ -135,11 +144,25 @@ func TestSideOf(t *testing.T) {
     d := NewCoord(297.13043478260863, 339.30434782608694)
     e := NewCoord(445.8260869565217, 350.17391304347825)
 
+    cx, cy := Sub(b, a)
+    ab := NewCoord(cx, cy)
+    cx, cy = Sub(c, a)
+    ac := NewCoord(cx, cy)
+    cx, cy = Sub(d, a)
+    ad := NewCoord(cx, cy)
+    cx, cy = Sub(e, a)
+    ae := NewCoord(cx, cy)
+
     g.Describe("ccw turn", func() {
         g.It("turn ccw", func() {
-            g.Assert(FloatEqual(CCW(b, a, c), 0)).IsTrue()
-            g.Assert(CCW(d, a, c) > 0).IsTrue()
-            g.Assert(CCW(e, a, c) < 0).IsTrue()
+            g.Assert(FloatEqual(CCW(a, b, c), 0)).IsTrue()
+            g.Assert(FloatEqual(CCWVector(ab, ac), 0)).IsTrue()
+
+            g.Assert(CCW(a, c, d) > 0).IsTrue()
+            g.Assert(CCWVector(ac, ad) > 0).IsTrue()
+
+            g.Assert(CCW(a, c, e) < 0).IsTrue()
+            g.Assert(CCWVector(ac, ae) < 0).IsTrue()
         })
     })
 
@@ -170,7 +193,7 @@ func TestCCW(t *testing.T) {
             }
             g.Assert(CCW(k, u, &Coord{2, 2}) > 0).IsTrue()
 
-            side_out := []func(x float64) bool {
+            side_out := []func(x float64) bool{
                 left, left, right, right, left,
                 right, on, on,
             }
@@ -183,7 +206,6 @@ func TestCCW(t *testing.T) {
 
 }
 
-
 func TestProj(t *testing.T) {
     g := Goblin(t)
     g.Describe("Vector - unit & Project", func() {
@@ -193,11 +215,79 @@ func TestProj(t *testing.T) {
             g.Assert(Round(Project(A, B), 5)).Equal(0.56121)
         })
         g.It("should test Unit", func() {
-            Z := &Coord{0.,  0.}
+            Z := &Coord{0., 0.}
             cx, cy := Unit(Z)
             g.Assert(FloatEqual(cx, 0)).IsTrue()
             g.Assert(FloatEqual(cy, 0)).IsTrue()
         })
     })
+}
+
+func TestDirection(t *testing.T) {
+    g := Goblin(t)
+    g.Describe("Vector Direction", func() {
+        g.It("should test vector direction", func() {
+            A := &Coord{0, 0}
+            B := &Coord{-1, 0}
+            cx, cy := Sub(B, A)
+            v := NewCoord(cx, cy)
+            g.Assert(Direction(NewCoord(1, 1))).Equal(0.7853981633974483)
+            g.Assert(Direction(NewCoord(-1, 0))).Equal(math.Pi)
+            g.Assert(Direction(v)).Equal(math.Pi)
+            g.Assert(Direction(NewCoord(1, math.Sqrt(3)))).Equal(Deg2rad(60))
+            g.Assert(Direction(NewCoord(0, -1))).Equal(Deg2rad(270))
+        })
+    })
+
+}
+
+func TestReverseDirection(t *testing.T) {
+    g := Goblin(t)
+    g.Describe("Vector RevDirection", func() {
+        g.It("should test reverse vector direction", func() {
+            A := &Coord{0, 0}
+            B := &Coord{-1, 0}
+            cx, cy := Sub(B, A)
+            v := NewCoord(cx, cy)
+            g.Assert(ReverseDirection(Direction(v))).Equal(0.0)
+            g.Assert(ReverseDirection(0.7853981633974483)).Equal(0.7853981633974483 + math.Pi)
+            g.Assert(ReverseDirection(0.7853981633974483 + math.Pi)).Equal(0.7853981633974483)
+        })
+    })
+
+}
+
+func TestDeflection(t *testing.T) {
+    g := Goblin(t)
+    g.Describe("Vector Deflection", func() {
+        g.It("should test reverse vector direction", func() {
+            ln0 := []*Coord{{0, 0}, {20, 30}}
+            ln1 := []*Coord{{20, 30}, {40, 15}}
+            cx, cy := Sub(ln0[1], ln0[0])
+            v0 := &Coord{cx, cy }
+            cx, cy = Sub(ln1[1], ln1[0])
+            v1 := &Coord{cx, cy }
+
+            g.Assert(Round(DeflectionAngle(
+                Direction(v0),
+                Direction(v1),
+            ), 10)).Equal(Round(Deg2rad(93.17983011986422), 10))
+            g.Assert(Round(DeflectionAngle(
+                Direction(v0),
+                Direction(v0),
+            ), 10)).Equal(Deg2rad(0.0))
+
+            ln1 = []*Coord{{20, 30}, {20, 60}}
+            cx, cy = Sub(ln1[1], ln1[0])
+            v1 = &Coord{cx, cy }
+            g.Assert(Round(DeflectionAngle(
+                Direction(v0),
+                Direction(v1),
+            ), 10)).Equal(
+                Round(Deg2rad(-33.690067525979806), 10),
+            )
+        })
+    })
+
 }
 

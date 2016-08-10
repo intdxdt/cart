@@ -13,3 +13,9 @@ func (o *Coord) X() float64 {
 func (o *Coord) Y() float64 {
     return o[y]
 }
+
+//Check if any of the component of is not a number
+func (o *Coord) IsNull() bool {
+    return IsNull(o)
+}
+
