@@ -1,8 +1,8 @@
 package cart2d
 
 import (
-    . "simplex/util/math"
     "math"
+    . "simplex/util/math"
 )
 
 const precision = 12

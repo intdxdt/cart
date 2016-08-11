@@ -67,7 +67,6 @@ func TestCart(t *testing.T) {
 
 }
 
-
 //Test Neg
 func Test_Neg(t *testing.T) {
     g := Goblin(t)
@@ -323,4 +322,3 @@ func TestDistanceToPoint(t *testing.T) {
     })
 
 }
-
