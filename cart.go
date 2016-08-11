@@ -77,8 +77,13 @@ func UnitXY(x, y float64) (float64, float64) {
 
 //Projects  u on to v
 func Project(u, onv Cart2D) float64 {
-    cx, cy := Unit(onv)
-    return DotProductXY(u.X(), u.Y(), cx, cy)
+    return ProjectXY(u.X(), u.Y(), onv.X(), onv.Y())
+}
+
+//Projects  u on to v, using x and y compoents of u and v
+func ProjectXY(ux, uy , onv_x, onv_y float64) float64 {
+    cx, cy := UnitXY(onv_x, onv_y)
+    return DotProductXY(ux, uy, cx, cy)
 }
 
 //2D cross product of AB and AC vectors given A, B, and C as points,

@@ -291,3 +291,36 @@ func TestDeflection(t *testing.T) {
 
 }
 
+func TestDistanceToPoint(t *testing.T) {
+    g := Goblin(t)
+    g.Describe("Vector - Dist2Vect", func() {
+        g.It("should test distance vector", func() {
+            a := &Coord{16.82295, 10.44635}
+            b := &Coord{28.99656, 15.76452}
+            on_ab := &Coord{25.32, 14.16}
+
+            tpoints := []*Coord{
+                {30., 0.},
+                {15.78786, 25.26468},
+                {-2.61504, -3.09018},
+                {28.85125, 27.81773},
+                a,
+                b,
+                on_ab,
+            }
+
+            t_dists := []float64{14.85, 13.99, 23.69, 12.05, 0.00, 0.00, 0.00}
+            dists := make([]float64, len(tpoints))
+
+            for i, tp := range tpoints {
+                dists[i] = DistanceToPoint(a, b, tp)
+            }
+
+            for i := range tpoints {
+                g.Assert(Round(dists[i], 2)).Equal(Round(t_dists[i], 2))
+            }
+        })
+    })
+
+}
+
