@@ -155,13 +155,13 @@ func TestSideOf(t *testing.T) {
     g.Describe("ccw turn", func() {
         g.It("turn ccw", func() {
             g.Assert(FloatEqual(CCW(a, b, c), 0)).IsTrue()
-            g.Assert(FloatEqual(CCWVector(ab, ac), 0)).IsTrue()
+            g.Assert(FloatEqual(CrossProduct(ab, ac), 0)).IsTrue()
 
             g.Assert(CCW(a, c, d) > 0).IsTrue()
-            g.Assert(CCWVector(ac, ad) > 0).IsTrue()
+            g.Assert(CrossProduct(ac, ad) > 0).IsTrue()
 
             g.Assert(CCW(a, c, e) < 0).IsTrue()
-            g.Assert(CCWVector(ac, ae) < 0).IsTrue()
+            g.Assert(CrossProduct(ac, ae) < 0).IsTrue()
         })
     })
 

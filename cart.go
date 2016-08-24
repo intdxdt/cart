@@ -93,13 +93,16 @@ func ProjectXY(ux, uy , onv_x, onv_y float64) float64 {
 func CCW(a, b, c Cart2D) float64 {
     return (b.X() - a.X()) * (c.Y() - a.Y()) - (b.Y() - a.Y()) * (c.X() - a.X())
 }
+
 //2D cross product of AB and AC vectors,
 //i.e. z-component of their 3D cross product.
 //Returns a positive value, if AB-->BC makes a counter-clockwise turn,
 //negative for clockwise turn, and zero if the points are collinear.
-func CCWVector(ab, ac Cart2D) float64 {
+func CrossProduct(ab, ac Cart2D) float64 {
     return (ab.X() * ac.Y()) - (ab.Y() * ac.X())
 }
+
+
 
 //Computes the square vector magnitude of pt as vector: x , y as components
 //This has a potential overflow problem based on coordinates of pt x^2 + y^2
