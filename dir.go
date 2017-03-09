@@ -1,8 +1,8 @@
 package cart2d
 
 import (
-    "math"
-    ."simplex/util/math"
+	"math"
+	umath "simplex/util/math"
 )
 
 //Dir computes direction in radians - counter clockwise from x-axis.
@@ -11,27 +11,26 @@ func Direction(v Cart2D) float64 {
 }
 
 //Dir computes direction in radians - counter clockwise from x-axis.
-func DirectionXY(x , y float64) float64 {
+func DirectionXY(x, y float64) float64 {
 	d := math.Atan2(y, x)
 	if d < 0 {
-		d += Tau
+		d += umath.Tau
 	}
 	return d
 }
 
 //Revdir computes the reversed direction from a foward direction
 func ReverseDirection(d float64) float64 {
-	if d < Pi {
-		return d + Pi
+	if d < umath.Pi {
+		return d + umath.Pi
 	}
-	return d - Pi
+	return d - umath.Pi
 }
-
 
 func DeflectionAngle(bearing1, bearing2 float64) float64 {
 	a := bearing2 - ReverseDirection(bearing1)
 	if a < 0.0 {
-		a = a + Tau
+		a = a + umath.Tau
 	}
-	return Pi - a
+	return umath.Pi - a
 }

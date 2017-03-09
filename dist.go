@@ -2,7 +2,7 @@ package cart2d
 
 import (
     "math"
-    . "simplex/util/math"
+    umath "simplex/util/math"
 )
 
 const precision = 12
@@ -37,13 +37,13 @@ func DistanceToPoint(a, b, pnt Cart2D) float64 {
 
     if rstate == false {
         // avoid floating point imprecision
-        h := Round(math.Abs(MagnitudeXY(ux, uy)), precision)
-        a := Round(math.Abs(dist_uv), precision)
+        h := umath.Round(math.Abs(MagnitudeXY(ux, uy)), precision)
+        a := umath.Round(math.Abs(dist_uv), precision)
 
-        if FloatEqual(h, 0.0) && FloatEqual(a, 0.0) {
+        if umath.FloatEqual(h, 0.0) && umath.FloatEqual(a, 0.0) {
             result = 0.0
         } else {
-            r := Round(a / h, precision)
+            r := umath.Round(a / h, precision)
             // to avoid numeric overflow
             result = h * math.Sqrt(1 - r * r)
         }

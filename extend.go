@@ -1,13 +1,13 @@
 package cart2d
 
 import (
-	. "simplex/util/math"
+	"simplex/util/math"
 )
 
 //Deflect_vector computes vector deflection given deflection angle and
 // side of vector to deflect from (from_end)
 func  Deflect(v Cart2D, mag, deflAngle float64, fromEnd bool) (float64, float64) {
-	angl := Pi - deflAngle
+	angl := math.Pi - deflAngle
 	return Extend(v, mag, angl, fromEnd)
 }
 
@@ -18,11 +18,11 @@ func   Extend(v Cart2D, magnitude, angle float64, from_end bool) (float64, float
 	//fβ - forward bearing
 	bβ := Direction(v)
 	if from_end {
-		bβ +=  Pi
+		bβ +=  math.Pi
 	}
 	fβ := bβ + angle
-	if fβ > Tau {
-		fβ -= Tau
+	if fβ > math.Tau {
+		fβ -= math.Tau
 	}
 	return Component(magnitude, fβ)
 }
