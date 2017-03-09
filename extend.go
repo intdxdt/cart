@@ -6,19 +6,19 @@ import (
 
 //Deflect_vector computes vector deflection given deflection angle and
 // side of vector to deflect from (from_end)
-func  Deflect(v Cart2D, mag, deflAngle float64, fromEnd bool) (float64, float64) {
+func Deflect(v Cart2D, mag, deflAngle float64, fromEnd bool) (float64, float64) {
 	angl := math.Pi - deflAngle
 	return Extend(v, mag, angl, fromEnd)
 }
 
 //Extvect extends vector from the from end or from begin of vector
-func   Extend(v Cart2D, magnitude, angle float64, from_end bool) (float64, float64) {
+func Extend(v Cart2D, magnitude, angle float64, from_end bool) (float64, float64) {
 	//from a of v back direction initiates as fwd v direction anticlockwise
 	//bβ - back bearing
 	//fβ - forward bearing
 	bβ := Direction(v)
 	if from_end {
-		bβ +=  math.Pi
+		bβ += math.Pi
 	}
 	fβ := bβ + angle
 	if fβ > math.Tau {
@@ -26,5 +26,3 @@ func   Extend(v Cart2D, magnitude, angle float64, from_end bool) (float64, float
 	}
 	return Component(magnitude, fβ)
 }
-
-
