@@ -93,6 +93,7 @@ func CCW(a, b, c Cart2D) float64 {
 
 //2D cross product of AB and AC vectors,
 //i.e. z-component of their 3D cross product.
+//Computes A--B--C : location C is on Left , On , or Right of line AB
 //Returns a positive value, if AB-->BC makes a counter-clockwise turn,
 //negative for clockwise turn, and zero if the points are collinear.
 func CrossProduct(ab, ac Cart2D) float64 {
@@ -137,6 +138,7 @@ func IsNull(v Cart2D) bool {
 //Checks if x and y components are zero
 func IsZero(v Cart2D) bool {
 	return umath.FloatEqual(v.X(), 0.0) && umath.FloatEqual(v.Y(), 0.0)
+
 }
 
 //computes square of a number
