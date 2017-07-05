@@ -1,4 +1,4 @@
-package cart2d
+package cart
 
 type Coord [2]float64
 

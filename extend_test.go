@@ -1,9 +1,9 @@
-package cart2d
+package cart
 
 import (
+	"testing"
 	"simplex/util/math"
 	"github.com/franela/goblin"
-	"testing"
 )
 
 const prec = 8

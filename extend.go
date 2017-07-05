@@ -1,4 +1,4 @@
-package cart2d
+package cart
 
 import (
 	"simplex/util/math"
