@@ -1,8 +1,7 @@
 package cart2d
 
 import (
-	"math"
-	umath "simplex/util/math"
+	"simplex/util/math"
 )
 
 const precision = 12
@@ -13,7 +12,7 @@ const precision = 12
 // if points outside the range of the vector the minimum distance
 // is not perperndicular to the vector
 // modified @Ref: http://www.mappinghacks.com/code/PolyLineReduction/
-func DistanceToPoint(a, b, pnt Cart2D) float64 {
+func DistanceToPoint(a, b, pnt Pt2D) float64 {
 	//vect = &Options{A: vect.a, B : pnt, }
 	vx, vy := b.X()-a.X(), b.Y()-a.Y()
 	ux, uy := pnt.X()-a.X(), pnt.Y()-a.Y()
@@ -37,13 +36,13 @@ func DistanceToPoint(a, b, pnt Cart2D) float64 {
 
 	if rstate == false {
 		// avoid floating point imprecision
-		h := umath.Round(math.Abs(MagnitudeXY(ux, uy)), precision)
-		a := umath.Round(math.Abs(dist_uv), precision)
+		h := math.Round(math.Abs(MagnitudeXY(ux, uy)), precision)
+		a := math.Round(math.Abs(dist_uv), precision)
 
-		if umath.FloatEqual(h, 0.0) && umath.FloatEqual(a, 0.0) {
+		if math.FloatEqual(h, 0.0) && math.FloatEqual(a, 0.0) {
 			result = 0.0
 		} else {
-			r := umath.Round(a/h, precision)
+			r := math.Round(a/h, precision)
 			// to avoid numeric overflow
 			result = h * math.Sqrt(1-r*r)
 		}

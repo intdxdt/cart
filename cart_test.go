@@ -2,9 +2,8 @@ package cart2d
 
 import (
 	"github.com/franela/goblin"
-	umath "simplex/util/math"
+	"simplex/util/math"
 	"testing"
-	"math"
 )
 
 func TestCart(t *testing.T) {
@@ -46,9 +45,9 @@ func TestCart(t *testing.T) {
 
 	g.Describe("operators", func() {
 		g.It("component ", func() {
-			cx, cy := Component(5, umath.Deg2rad(53.13010235415598))
-			g.Assert(umath.FloatEqual(cx, 3.0)).IsTrue()
-			g.Assert(umath.FloatEqual(cy, 4.0)).IsTrue()
+			cx, cy := Component(5, math.Deg2rad(53.13010235415598))
+			g.Assert(math.FloatEqual(cx, 3.0)).IsTrue()
+			g.Assert(math.FloatEqual(cy, 4.0)).IsTrue()
 		})
 		g.It("add ", func() {
 			a, b := &Coord{3., 0.}, &Coord{0., 4.}
@@ -103,8 +102,8 @@ func TestMagDist(t *testing.T) {
 			b := &Coord{3, 4 }
 			z := NewCoord(0, 0)
 			g.Assert(Magnitude(NewCoord(1, 1), z)).Equal(math.Sqrt2)
-			g.Assert(umath.Round(Magnitude(NewCoord(-3, 2), z), 8)).Equal(
-				umath.Round(3.605551275463989, 8),
+			g.Assert(math.Round(Magnitude(NewCoord(-3, 2), z), 8)).Equal(
+				math.Round(3.605551275463989, 8),
 			)
 			g.Assert(Magnitude(NewCoord(3, 4))).Equal(5.0)
 			g.Assert(Magnitude(NewCoord(3, 4), z)).Equal(5.0)
@@ -123,7 +122,7 @@ func TestDotProduct(t *testing.T) {
 	g.Describe("Point - Vector Dot Product", func() {
 		g.It("should test dot product", func() {
 			dot_prod := DotProduct(NewCoord(1.2, -4.2), NewCoord(1.2, -4.2))
-			g.Assert(19.08).Equal(umath.Round(dot_prod, 8))
+			g.Assert(19.08).Equal(math.Round(dot_prod, 8))
 		})
 	})
 
@@ -152,15 +151,16 @@ func TestSideOf(t *testing.T) {
 	cx, cy = Sub(e, a)
 	ae := NewCoord(cx, cy)
 
-	g.Describe("ccw turn", func() {
-		g.It("turn ccw", func() {
-			g.Assert(umath.FloatEqual(CCW(a, b, c), 0)).IsTrue()
-			g.Assert(umath.FloatEqual(CrossProduct(ab, ac), 0)).IsTrue()
+	g.Describe("Orientation and cross product", func() {
+		g.It("orientation", func() {
+			g.Assert(math.FloatEqual(Orientation2D(a, b, c), 0)).IsTrue()
+			g.Assert(Orientation2D(a, c, d) < 0).IsTrue()
+			g.Assert(Orientation2D(a, c, e) > 0).IsTrue()
 
-			g.Assert(CCW(a, c, d) > 0).IsTrue()
+		})
+		g.It("cross product", func() {
+			g.Assert(math.FloatEqual(CrossProduct(ab, ac), 0)).IsTrue()
 			g.Assert(CrossProduct(ac, ad) > 0).IsTrue()
-
-			g.Assert(CCW(a, c, e) < 0).IsTrue()
 			g.Assert(CrossProduct(ac, ae) < 0).IsTrue()
 		})
 	})
@@ -179,18 +179,18 @@ func TestCCW(t *testing.T) {
 			}
 
 			left, right, on := func(x float64) bool {
-				return x > 0
-			}, func(x float64) bool {
 				return x < 0
 			}, func(x float64) bool {
-				return umath.FloatEqual(x, 0)
+				return x > 0
+			}, func(x float64) bool {
+				return math.FloatEqual(x, 0)
 			}
 
 			sides := make([]float64, len(testpoints))
 			for i, pnt := range testpoints {
-				sides[i] = CCW(k, u, pnt)
+				sides[i] = Orientation2D(k, u, pnt)
 			}
-			g.Assert(CCW(k, u, &Coord{2, 2}) > 0).IsTrue()
+			g.Assert(Orientation2D(k, u, &Coord{2, 2}) < 0).IsTrue()
 
 			side_out := []func(x float64) bool{
 				left, left, right, right, left,
@@ -211,13 +211,13 @@ func TestProj(t *testing.T) {
 		var A = &Coord{0.88682, -1.06102}
 		var B = &Coord{3.5, 1.0}
 		g.It("should test projection", func() {
-			g.Assert(umath.Round(Project(A, B), 5)).Equal(0.56121)
+			g.Assert(math.Round(Project(A, B), 5)).Equal(0.56121)
 		})
 		g.It("should test Unit", func() {
 			Z := &Coord{0., 0.}
 			cx, cy := Unit(Z)
-			g.Assert(umath.FloatEqual(cx, 0)).IsTrue()
-			g.Assert(umath.FloatEqual(cy, 0)).IsTrue()
+			g.Assert(math.FloatEqual(cx, 0)).IsTrue()
+			g.Assert(math.FloatEqual(cy, 0)).IsTrue()
 		})
 	})
 }
@@ -233,8 +233,8 @@ func TestDirection(t *testing.T) {
 			g.Assert(Direction(NewCoord(1, 1))).Equal(0.7853981633974483)
 			g.Assert(Direction(NewCoord(-1, 0))).Equal(math.Pi)
 			g.Assert(Direction(v)).Equal(math.Pi)
-			g.Assert(Direction(NewCoord(1, math.Sqrt(3)))).Equal(umath.Deg2rad(60))
-			g.Assert(Direction(NewCoord(0, -1))).Equal(umath.Deg2rad(270))
+			g.Assert(Direction(NewCoord(1, math.Sqrt(3)))).Equal(math.Deg2rad(60))
+			g.Assert(Direction(NewCoord(0, -1))).Equal(math.Deg2rad(270))
 		})
 	})
 
@@ -267,23 +267,23 @@ func TestDeflection(t *testing.T) {
 			cx, cy = Sub(ln1[1], ln1[0])
 			v1 := &Coord{cx, cy }
 
-			g.Assert(umath.Round(DeflectionAngle(
+			g.Assert(math.Round(DeflectionAngle(
 				Direction(v0),
 				Direction(v1),
-			), 10)).Equal(umath.Round(umath.Deg2rad(93.17983011986422), 10))
-			g.Assert(umath.Round(DeflectionAngle(
+			), 10)).Equal(math.Round(math.Deg2rad(93.17983011986422), 10))
+			g.Assert(math.Round(DeflectionAngle(
 				Direction(v0),
 				Direction(v0),
-			), 10)).Equal(umath.Deg2rad(0.0))
+			), 10)).Equal(math.Deg2rad(0.0))
 
 			ln1 = []*Coord{{20, 30}, {20, 60}}
 			cx, cy = Sub(ln1[1], ln1[0])
 			v1 = &Coord{cx, cy }
-			g.Assert(umath.Round(DeflectionAngle(
+			g.Assert(math.Round(DeflectionAngle(
 				Direction(v0),
 				Direction(v1),
 			), 10)).Equal(
-				umath.Round(umath.Deg2rad(-33.690067525979806), 10),
+				math.Round(math.Deg2rad(-33.690067525979806), 10),
 			)
 		})
 	})
@@ -316,7 +316,7 @@ func TestDistanceToPoint(t *testing.T) {
 			}
 
 			for i := range tpoints {
-				g.Assert(umath.Round(dists[i], 2)).Equal(umath.Round(t_dists[i], 2))
+				g.Assert(math.Round(dists[i], 2)).Equal(math.Round(t_dists[i], 2))
 			}
 		})
 	})
