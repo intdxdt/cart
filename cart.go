@@ -112,7 +112,7 @@ func SquareMagnitude(v Pt2D, other ...Pt2D) float64 {
 		o := other[0]
 		dx, dy = o.X()-v.X(), o.Y()-v.Y()
 	}
-	return sqr(dx) + sqr(dy)
+	return (dx*dx) + (dy*dy)
 }
 
 //Computes vector magnitude of pt as vector: x , y as components
@@ -141,9 +141,4 @@ func IsNull(v Pt2D) bool {
 func IsZero(v Pt2D) bool {
 	return math.FloatEqual(v.X(), 0.0) && math.FloatEqual(v.Y(), 0.0)
 
-}
-
-//computes square of a number
-func sqr(x float64) float64 {
-	return x * x
 }

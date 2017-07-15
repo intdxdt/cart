@@ -1,9 +1,9 @@
 package cart
 
 import (
-	"github.com/franela/goblin"
-	"simplex/util/math"
 	"testing"
+	"simplex/util/math"
+	"github.com/franela/goblin"
 )
 
 func TestCart(t *testing.T) {
@@ -63,7 +63,6 @@ func TestCart(t *testing.T) {
 			g.Assert(&Coord{cx, cy}).Equal(&Coord{-1.0, -1.0})
 		})
 	})
-
 }
 
 //Test Neg
@@ -130,36 +129,35 @@ func TestDotProduct(t *testing.T) {
 
 func TestSideOf(t *testing.T) {
 	g := goblin.Goblin(t)
-	/*
-		237 289,
-		354.47839239412275 333.38072601555746,
-		462 374
-	 */
+
 	a := NewCoord(237, 289)
-	b := NewCoord(354.47839239412275, 333.38072601555746)
-	c := NewCoord(462, 374)
+	b := NewCoord(404.25, 357.25)
+	c := NewCoord(460, 380)
 
 	d := NewCoord(297.13043478260863, 339.30434782608694)
 	e := NewCoord(445.8260869565217, 350.17391304347825)
 
 	cx, cy := Sub(b, a)
 	ab := NewCoord(cx, cy)
+
 	cx, cy = Sub(c, a)
 	ac := NewCoord(cx, cy)
+
 	cx, cy = Sub(d, a)
 	ad := NewCoord(cx, cy)
+
 	cx, cy = Sub(e, a)
 	ae := NewCoord(cx, cy)
 
 	g.Describe("Orientation and cross product", func() {
 		g.It("orientation", func() {
-			g.Assert(math.FloatEqual(Orientation2D(a, b, c), 0)).IsTrue()
+			g.Assert(Orientation2D(a, b, c) == 0).IsTrue()
 			g.Assert(Orientation2D(a, c, d) < 0).IsTrue()
 			g.Assert(Orientation2D(a, c, e) > 0).IsTrue()
 
 		})
 		g.It("cross product", func() {
-			g.Assert(math.FloatEqual(CrossProduct(ab, ac), 0)).IsTrue()
+			g.Assert(CrossProduct(ab, ac) == 0).IsTrue()
 			g.Assert(CrossProduct(ac, ad) > 0).IsTrue()
 			g.Assert(CrossProduct(ac, ae) < 0).IsTrue()
 		})
