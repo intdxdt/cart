@@ -145,3 +145,13 @@ func IsNull(v Coord2D) bool {
 func IsZero(v Coord2D) bool {
 	return math.FloatEqual(v.X(), 0.0) && math.FloatEqual(v.Y(), 0.0)
 }
+
+//Checks equality in 2d
+func Equals2D(a, b Coord2D) bool {
+	return math.FloatEqual(a.X(), b.X()) && math.FloatEqual(b.Y(), b.Y())
+}
+
+//Checks equality in 3d
+func Equals3D(a, b Coord3D) bool {
+	return Equals2D(a, b)  && math.FloatEqual(a.Z(), b.Z())
+}
