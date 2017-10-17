@@ -1,5 +1,7 @@
 package cart
 
+import "github.com/intdxdt/math"
+
 type Coord [2]float64
 
 func NewCoord(x, y float64) *Coord {
@@ -19,4 +21,9 @@ func (o *Coord) Y() float64 {
 //Check if any of the component of is not a number
 func (o *Coord) IsNull() bool {
 	return IsNull(o)
+}
+
+//Returns x y separated by single space
+func CoordString(v Pt2D) string {
+	return math.FloatToString(v.X()) + " " + math.FloatToString(v.Y())
 }

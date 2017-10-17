@@ -140,5 +140,4 @@ func IsNull(v Pt2D) bool {
 //Checks if x and y components are zero
 func IsZero(v Pt2D) bool {
 	return math.FloatEqual(v.X(), 0.0) && math.FloatEqual(v.Y(), 0.0)
-
 }
