@@ -8,7 +8,7 @@ import (
 // if points outside the range of the vector the minimum distance
 // is not perperndicular to the vector
 // modified @Ref: http://www.mappinghacks.com/code/PolyLineReduction/
-func DistanceToPoint(a, b, pnt Pt2D) float64 {
+func DistanceToPoint(a, b, pnt Coord2D) float64 {
 
 	//vect = &Options{A: vect.a, B : pnt, }
 	vx, vy := b.X()-a.X(), b.Y()-a.Y()

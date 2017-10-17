@@ -1,55 +1,59 @@
 package cart
 
 import (
-	"github.com/intdxdt/robust"
 	"github.com/intdxdt/math"
+	"github.com/intdxdt/robust"
 )
 
 const (
 	x = iota
 	y
+	z
 )
 
-
-type Pt2D interface {
+type Coord2D interface {
 	X() float64
 	Y() float64
 	IsNull() bool
 }
 
+type Coord3D interface {
+	Coord2D
+	Z() float64
+}
+
 //Component vector
 func Component(m, d float64) (float64, float64) {
-
 	return m * math.Cos(d), m * math.Sin(d)
 }
 
 //Equals evaluates whether two points are the same
-func Equals(v, o Pt2D) bool {
+func Equals(v, o Coord2D) bool {
 	return math.FloatEqual(v.X(), o.X()) && math.FloatEqual(v.Y(), o.Y())
 }
 
 //Computes the addition of x and y components
-func Add(v Pt2D, o Pt2D) (float64, float64) {
+func Add(v, o Coord2D) (float64, float64) {
 	return v.X() + o.X(), v.Y() + o.Y()
 }
 
 //Computes the difference between x , y components
-func Sub(v Pt2D, o Pt2D) (float64, float64) {
+func Sub(v, o Coord2D) (float64, float64) {
 	return v.X() - o.X(), v.Y() - o.Y()
 }
 
 //KProduct scales x and y components by constant  k
-func KProduct(v Pt2D, k float64) (float64, float64) {
+func KProduct(v Coord2D, k float64) (float64, float64) {
 	return k * v.X(), k * v.Y()
 }
 
 //Negates components x and y
-func Neg(v Pt2D) (float64, float64) {
+func Neg(v Coord2D) (float64, float64) {
 	return KProduct(v, -1.0)
 }
 
 //Dot Product of two points as vectors
-func DotProduct(v, o Pt2D) float64 {
+func DotProduct(v, o Coord2D) float64 {
 	return DotProductXY(v.X(), v.Y(), o.X(), o.Y())
 }
 
@@ -59,7 +63,7 @@ func DotProductXY(vx, vy, ox, oy float64) float64 {
 }
 
 //Unit vector of point
-func Unit(v Pt2D) (float64, float64) {
+func Unit(v Coord2D) (float64, float64) {
 	return UnitXY(v.X(), v.Y())
 }
 
@@ -73,7 +77,7 @@ func UnitXY(x, y float64) (float64, float64) {
 }
 
 //Projects  u on to v
-func Project(u, onv Pt2D) float64 {
+func Project(u, onv Coord2D) float64 {
 	return ProjectXY(u.X(), u.Y(), onv.X(), onv.Y())
 }
 
@@ -87,7 +91,7 @@ func ProjectXY(ux, uy, onvX, onvY float64) float64 {
 //i.e. z-component of their 3D cross product.
 //Returns a positive value, if ABC makes a counter-clockwise turn,
 //negative for clockwise turn, and zero if the points are collinear.
-func Orientation2D(a, b, c Pt2D) float64 {
+func Orientation2D(a, b, c Coord2D) float64 {
 	return robust.Orientation2D(
 		[]float64{a.X(), a.Y()},
 		[]float64{b.X(), b.Y()},
@@ -98,13 +102,13 @@ func Orientation2D(a, b, c Pt2D) float64 {
 //2D cross product of AB and AC vectors,
 //i.e. z-component of their 3D cross product.
 //negative cw and positive if ccw
-func CrossProduct(ab, ac Pt2D) float64 {
+func CrossProduct(ab, ac Coord2D) float64 {
 	return (ab.X() * ac.Y()) - (ab.Y() * ac.X())
 }
 
 //Computes the square vector magnitude of pt as vector: x , y as components
 //This has a potential overflow problem based on coordinates of pt x^2 + y^2
-func SquareMagnitude(v Pt2D, other ...Pt2D) float64 {
+func SquareMagnitude(v Coord2D, other ...Coord2D) float64 {
 	var dx, dy float64
 	if len(other) == 0 {
 		dx, dy = v.X(), v.Y()
@@ -112,11 +116,11 @@ func SquareMagnitude(v Pt2D, other ...Pt2D) float64 {
 		o := other[0]
 		dx, dy = o.X()-v.X(), o.Y()-v.Y()
 	}
-	return (dx*dx) + (dy*dy)
+	return (dx * dx) + (dy * dy)
 }
 
 //Computes vector magnitude of pt as vector: x , y as components
-func Magnitude(v Pt2D, other ...Pt2D) float64 {
+func Magnitude(v Coord2D, other ...Coord2D) float64 {
 	var dx, dy float64
 	if len(other) == 0 {
 		dx, dy = v.X(), v.Y()
@@ -133,11 +137,11 @@ func MagnitudeXY(dx, dy float64) float64 {
 }
 
 //Checks if catesian coordinate is null ( has NaN )
-func IsNull(v Pt2D) bool {
+func IsNull(v Coord2D) bool {
 	return math.IsNaN(v.X()) || math.IsNaN(v.Y())
 }
 
 //Checks if x and y components are zero
-func IsZero(v Pt2D) bool {
+func IsZero(v Coord2D) bool {
 	return math.FloatEqual(v.X(), 0.0) && math.FloatEqual(v.Y(), 0.0)
 }

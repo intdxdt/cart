@@ -5,7 +5,7 @@ import (
 )
 
 //Dir computes direction in radians - counter clockwise from x-axis.
-func Direction(v Pt2D) float64 {
+func Direction(v Coord2D) float64 {
 	return DirectionXY(v.X(), v.Y())
 }
 
