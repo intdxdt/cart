@@ -2,7 +2,7 @@ package cart
 
 import (
 	"testing"
-	"simplex/util/math"
+	"github.com/intdxdt/math"
 	"github.com/franela/goblin"
 )
 
@@ -66,7 +66,7 @@ func TestCart(t *testing.T) {
 }
 
 //Test Neg
-func Test_Neg(t *testing.T) {
+func TestNeg(t *testing.T) {
 	g := goblin.Goblin(t)
 	g.Describe("Negate Vector", func() {
 		g.It("should test vector negation", func() {
@@ -120,8 +120,8 @@ func TestDotProduct(t *testing.T) {
 	g := goblin.Goblin(t)
 	g.Describe("Point - Vector Dot Product", func() {
 		g.It("should test dot product", func() {
-			dot_prod := DotProduct(NewCoord(1.2, -4.2), NewCoord(1.2, -4.2))
-			g.Assert(19.08).Equal(math.Round(dot_prod, 8))
+			dotProd := DotProduct(NewCoord(1.2, -4.2), NewCoord(1.2, -4.2))
+			g.Assert(19.08).Equal(math.Round(dotProd, 8))
 		})
 	})
 
@@ -190,13 +190,13 @@ func TestCCW(t *testing.T) {
 			}
 			g.Assert(Orientation2D(k, u, &Coord{2, 2}) < 0).IsTrue()
 
-			side_out := []func(x float64) bool{
+			sideOut := []func(x float64) bool{
 				left, left, right, right, left,
 				right, on, on,
 			}
 
-			for i := range side_out {
-				g.Assert(side_out[i](sides[i])).IsTrue()
+			for i := range sideOut {
+				g.Assert(sideOut[i](sides[i])).IsTrue()
 			}
 		})
 	})
@@ -294,7 +294,7 @@ func TestDistanceToPoint(t *testing.T) {
 		g.It("should test distance vector", func() {
 			a := &Coord{16.82295, 10.44635}
 			b := &Coord{28.99656, 15.76452}
-			on_ab := &Coord{25.32, 14.16}
+			onAb := &Coord{25.32, 14.16}
 
 			tpoints := []*Coord{
 				{30., 0.},
@@ -303,10 +303,10 @@ func TestDistanceToPoint(t *testing.T) {
 				{28.85125, 27.81773},
 				a,
 				b,
-				on_ab,
+				onAb,
 			}
 
-			t_dists := []float64{14.85, 13.99, 23.69, 12.05, 0.00, 0.00, 0.00}
+			tDists := []float64{14.85, 13.99, 23.69, 12.05, 0.00, 0.00, 0.00}
 			dists := make([]float64, len(tpoints))
 
 			for i, tp := range tpoints {
@@ -314,7 +314,7 @@ func TestDistanceToPoint(t *testing.T) {
 			}
 
 			for i := range tpoints {
-				g.Assert(math.Round(dists[i], 2)).Equal(math.Round(t_dists[i], 2))
+				g.Assert(math.Round(dists[i], 2)).Equal(math.Round(tDists[i], 2))
 			}
 		})
 	})

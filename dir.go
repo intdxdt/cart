@@ -1,7 +1,7 @@
 package cart
 
 import (
-	"simplex/util/math"
+	"github.com/intdxdt/math"
 )
 
 //Dir computes direction in radians - counter clockwise from x-axis.

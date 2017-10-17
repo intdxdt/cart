@@ -1,18 +1,15 @@
 package cart
 
 import (
-	"simplex/util/math"
+	"github.com/intdxdt/math"
 )
 
-const precision = 12
-
-//Dist2Pt computes distance from a point to Vect
 // Minimum distance to vector from a point
-// compute the minimum distance between point and vector
 // if points outside the range of the vector the minimum distance
 // is not perperndicular to the vector
 // modified @Ref: http://www.mappinghacks.com/code/PolyLineReduction/
 func DistanceToPoint(a, b, pnt Pt2D) float64 {
+
 	//vect = &Options{A: vect.a, B : pnt, }
 	vx, vy := b.X()-a.X(), b.Y()-a.Y()
 	ux, uy := pnt.X()-a.X(), pnt.Y()-a.Y()
@@ -36,13 +33,13 @@ func DistanceToPoint(a, b, pnt Pt2D) float64 {
 
 	if rstate == false {
 		// avoid floating point imprecision
-		h := math.Round(math.Abs(MagnitudeXY(ux, uy)), precision)
-		a := math.Round(math.Abs(dist_uv), precision)
+		h := math.Round(math.Abs(MagnitudeXY(ux, uy)), math.PRECISION)
+		a := math.Round(math.Abs(dist_uv), math.PRECISION)
 
 		if math.FloatEqual(h, 0.0) && math.FloatEqual(a, 0.0) {
 			result = 0.0
 		} else {
-			r := math.Round(a/h, precision)
+			r := math.Round(a/h, math.PRECISION)
 			// to avoid numeric overflow
 			result = h * math.Sqrt(1-r*r)
 		}

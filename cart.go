@@ -1,8 +1,8 @@
 package cart
 
 import (
-	"robust"
-	"simplex/util/math"
+	"github.com/intdxdt/robust"
+	"github.com/intdxdt/math"
 )
 
 const (
@@ -10,7 +10,6 @@ const (
 	y
 )
 
-const EPS = 1e-12
 
 type Pt2D interface {
 	X() float64
@@ -20,6 +19,7 @@ type Pt2D interface {
 
 //Component vector
 func Component(m, d float64) (float64, float64) {
+
 	return m * math.Cos(d), m * math.Sin(d)
 }
 
@@ -67,7 +67,7 @@ func Unit(v Pt2D) (float64, float64) {
 func UnitXY(x, y float64) (float64, float64) {
 	m := MagnitudeXY(x, y)
 	if math.FloatEqual(m, 0.0) {
-		m = EPS
+		m = math.EPSILON
 	}
 	return x / m, y / m
 }
@@ -78,8 +78,8 @@ func Project(u, onv Pt2D) float64 {
 }
 
 //Projects  u on to v, using x and y compoents of u and v
-func ProjectXY(ux, uy, onv_x, onv_y float64) float64 {
-	cx, cy := UnitXY(onv_x, onv_y)
+func ProjectXY(ux, uy, onvX, onvY float64) float64 {
+	cx, cy := UnitXY(onvX, onvY)
 	return DotProductXY(ux, uy, cx, cy)
 }
 
