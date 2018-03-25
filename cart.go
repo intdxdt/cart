@@ -106,34 +106,38 @@ func CrossProduct(ab, ac Coord2D) float64 {
 	return (ab.X() * ac.Y()) - (ab.Y() * ac.X())
 }
 
-//Computes the square vector magnitude of pt as vector: x , y as components
-//This has a potential overflow problem based on coordinates of pt x^2 + y^2
-func SquareMagnitude(v Coord2D, other ...Coord2D) float64 {
-	var dx, dy float64
-	if len(other) == 0 {
-		dx, dy = v.X(), v.Y()
-	} else {
-		o := other[0]
-		dx, dy = o.X()-v.X(), o.Y()-v.Y()
-	}
-	return (dx * dx) + (dy * dy)
-}
-
 //Computes vector magnitude of pt as vector: x , y as components
 func Magnitude(v Coord2D, other ...Coord2D) float64 {
 	var dx, dy float64
 	if len(other) == 0 {
 		dx, dy = v.X(), v.Y()
 	} else {
+		dx, dy = other[0].X()-v.X(), other[0].Y()-v.Y()
+	}
+	return MagnitudeXY(dx, dy)
+}
+
+//Computes the square vector magnitude of pt as vector: x , y as components
+//This has a potential overflow problem based on coordinates of pt x^2 + y^2
+func MagnitudeSquare(v Coord2D, other ...Coord2D) float64 {
+	var dx, dy float64
+	if len(other) == 0 {
+		dx, dy = v.X(), v.Y()
+	} else {
 		o := other[0]
 		dx, dy = o.X()-v.X(), o.Y()-v.Y()
 	}
-	return MagnitudeXY(dx, dy)
+	return MagnitudeSquareXY(dx, dy)
 }
 
 //Computes vector magnitude given x an dy component
 func MagnitudeXY(dx, dy float64) float64 {
 	return math.Hypot(dx, dy)
+}
+
+//Computes vector magnitude given x an dy component
+func MagnitudeSquareXY(dx, dy float64) float64 {
+	return (dx * dx) + (dy * dy)
 }
 
 //Checks if catesian coordinate is null ( has NaN )

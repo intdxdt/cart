@@ -11,6 +11,7 @@ func Deflect(v Coord2D, mag, deflAngle float64, fromEnd bool) (float64, float64)
 	return Extend(v, mag, angl, fromEnd)
 }
 
+
 //Extvect extends vector from the from end or from begin of vector
 func Extend(v Coord2D, magnitude, angle float64, fromEnd bool) (float64, float64) {
 	//from a of v back direction initiates as fwd v direction anticlockwise
