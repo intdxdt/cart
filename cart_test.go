@@ -228,11 +228,11 @@ func TestDirection(t *testing.T) {
 			B := &Coord{-1, 0}
 			cx, cy := Sub(B, A)
 			v := NewCoord(cx, cy)
-			g.Assert(Direction(NewCoord(1, 1))).Equal(0.7853981633974483)
-			g.Assert(Direction(NewCoord(-1, 0))).Equal(math.Pi)
-			g.Assert(Direction(v)).Equal(math.Pi)
-			g.Assert(Direction(NewCoord(1, math.Sqrt(3)))).Equal(math.Deg2rad(60))
-			g.Assert(Direction(NewCoord(0, -1))).Equal(math.Deg2rad(270))
+			g.Assert(Direction(1, 1)).Equal(0.7853981633974483)
+			g.Assert(Direction(-1, 0)).Equal(math.Pi)
+			g.Assert(Direction(v[x], v[y])).Equal(math.Pi)
+			g.Assert(Direction(1, math.Sqrt(3))).Equal(math.Deg2rad(60))
+			g.Assert(Direction(0, -1)).Equal(math.Deg2rad(270))
 		})
 	})
 
@@ -246,7 +246,7 @@ func TestReverseDirection(t *testing.T) {
 			B := &Coord{-1, 0}
 			cx, cy := Sub(B, A)
 			v := NewCoord(cx, cy)
-			g.Assert(ReverseDirection(Direction(v))).Equal(0.0)
+			g.Assert(ReverseDirection(Direction(v[x], v[y]))).Equal(0.0)
 			g.Assert(ReverseDirection(0.7853981633974483)).Equal(0.7853981633974483 + math.Pi)
 			g.Assert(ReverseDirection(0.7853981633974483 + math.Pi)).Equal(0.7853981633974483)
 		})
@@ -266,20 +266,20 @@ func TestDeflection(t *testing.T) {
 			v1 := &Coord{cx, cy }
 
 			g.Assert(math.Round(DeflectionAngle(
-				Direction(v0),
-				Direction(v1),
+				Direction(v0[x],v0[y]),
+				Direction(v1[x],v1[y]),
 			), 10)).Equal(math.Round(math.Deg2rad(93.17983011986422), 10))
 			g.Assert(math.Round(DeflectionAngle(
-				Direction(v0),
-				Direction(v0),
+				Direction(v0[x],v0[y]),
+				Direction(v0[x],v0[y]),
 			), 10)).Equal(math.Deg2rad(0.0))
 
 			ln1 = []*Coord{{20, 30}, {20, 60}}
 			cx, cy = Sub(ln1[1], ln1[0])
 			v1 = &Coord{cx, cy }
 			g.Assert(math.Round(DeflectionAngle(
-				Direction(v0),
-				Direction(v1),
+				Direction(v0[x], v0[y]),
+				Direction(v1[x], v1[y]),
 			), 10)).Equal(
 				math.Round(math.Deg2rad(-33.690067525979806), 10),
 			)

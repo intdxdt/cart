@@ -5,12 +5,7 @@ import (
 )
 
 //Dir computes direction in radians - counter clockwise from x-axis.
-func Direction(v Coord2D) float64 {
-	return DirectionXY(v.X(), v.Y())
-}
-
-//Dir computes direction in radians - counter clockwise from x-axis.
-func DirectionXY(x, y float64) float64 {
+func Direction(x, y float64) float64 {
 	d := math.Atan2(y, x)
 	if d < 0 {
 		d += math.Tau
