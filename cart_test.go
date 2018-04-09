@@ -34,12 +34,12 @@ func TestCart(t *testing.T) {
 		g.It("sqrt(3**2,4**2) ", func() {
 			pt := &Coord{3., 0.}
 			g.Assert(Magnitude(pt, &Coord{0., 4.})).Equal(5.0)
-			g.Assert(SquareMagnitude(pt, &Coord{0., 4.})).Equal(25.0)
+			g.Assert(MagnitudeSquare(pt, &Coord{0., 4.})).Equal(25.0)
 		})
 		g.It("sqrt(2)", func() {
 			pt := &Coord{3, 4}
 			g.Assert(Magnitude(pt, &Coord{4, 5})).Equal(math.Sqrt2)
-			g.Assert(SquareMagnitude(pt, &Coord{4, 5})).Equal(2.0)
+			g.Assert(MagnitudeSquare(pt, &Coord{4, 5})).Equal(2.0)
 		})
 	})
 
@@ -107,9 +107,9 @@ func TestMagDist(t *testing.T) {
 			g.Assert(Magnitude(NewCoord(3, 4))).Equal(5.0)
 			g.Assert(Magnitude(NewCoord(3, 4), z)).Equal(5.0)
 			g.Assert(Magnitude(a, b)).Equal(5.0)
-			g.Assert(SquareMagnitude(NewCoord(3, 4), z)).Equal(25.0)
-			g.Assert(SquareMagnitude(NewCoord(3, 4))).Equal(25.0)
-			g.Assert(SquareMagnitude(a, b)).Equal(25.0)
+			g.Assert(MagnitudeSquare(NewCoord(3, 4), z)).Equal(25.0)
+			g.Assert(MagnitudeSquare(NewCoord(3, 4))).Equal(25.0)
+			g.Assert(MagnitudeSquare(a, b)).Equal(25.0)
 			g.Assert(Magnitude(NewCoord(4.587, 0.), z)).Equal(4.587)
 		})
 	})

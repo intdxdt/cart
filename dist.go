@@ -10,21 +10,18 @@ import (
 // modified @Ref: http://www.mappinghacks.com/code/PolyLineReduction/
 func DistanceToPoint(a, b, pnt Coord2D) float64 {
 
-	//vect = &Options{A: vect.a, B : pnt, }
-	vx, vy := b.X()-a.X(), b.Y()-a.Y()
-	ux, uy := pnt.X()-a.X(), pnt.Y()-a.Y()
-
-	dist_uv := ProjectXY(ux, uy, vx, vy)
-
-	rstate := false
-	result := 0.0
+	var vx, vy = b.X()-a.X(), b.Y()-a.Y()
+	var ux, uy = pnt.X()-a.X(), pnt.Y()-a.Y()
+	var dist_uv = ProjectXY(ux, uy, vx, vy)
+	var rstate = false
+	var result = 0.0
 
 	if dist_uv < 0 {
 		// if negative
 		result = MagnitudeXY(ux, uy)
 		rstate = true
 	} else {
-		d := ProjectXY(ux-vx, uy-vy, -vx, -vy)
+		var d = ProjectXY(ux-vx, uy-vy, -vx, -vy)
 		if d < 0.0 {
 			result = MagnitudeXY(ux-vx, uy-vy)
 			rstate = true
@@ -33,13 +30,13 @@ func DistanceToPoint(a, b, pnt Coord2D) float64 {
 
 	if rstate == false {
 		// avoid floating point imprecision
-		h := math.Round(math.Abs(MagnitudeXY(ux, uy)), math.PRECISION)
-		a := math.Round(math.Abs(dist_uv), math.PRECISION)
+		var h = math.Round(math.Abs(MagnitudeXY(ux, uy)), math.PRECISION)
+		var a = math.Round(math.Abs(dist_uv), math.PRECISION)
 
 		if math.FloatEqual(h, 0.0) && math.FloatEqual(a, 0.0) {
 			result = 0.0
 		} else {
-			r := math.Round(a/h, math.PRECISION)
+			var r = math.Round(a/h, math.PRECISION)
 			// to avoid numeric overflow
 			result = h * math.Sqrt(1-r*r)
 		}
