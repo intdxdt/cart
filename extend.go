@@ -17,7 +17,7 @@ func Extend(v Coord2D, magnitude, angle float64, fromEnd bool) (float64, float64
 	//from a of v back direction initiates as fwd v direction anticlockwise
 	//bb - back bearing
 	//fb - forward bearing
-	bb := Direction(v)
+	bb := Direction(v.X(), v.Y())
 	if fromEnd {
 		bb += math.Pi
 	}
